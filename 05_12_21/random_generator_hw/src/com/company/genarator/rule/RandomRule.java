@@ -22,4 +22,6 @@ package com.company.genarator.rule;
  * </p>
  */
 public interface RandomRule {
+
+    int nextInt();
 }

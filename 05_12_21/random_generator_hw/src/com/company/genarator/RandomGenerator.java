@@ -1,9 +1,11 @@
 package com.company.genarator;
 
+import com.company.genarator.rule.RandomRule;
+
+import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
  * Задача этого класса: генерация списка чисел на основе установленого правила RandomRule<br>
  * RandomRule мы устанавливаем при создании этого правила.
  * <p>
@@ -29,6 +31,13 @@ import java.util.List;
  */
 public class RandomGenerator {
 
+
+    private final RandomRule rule;
+
+    public RandomGenerator(RandomRule rule) {
+        this.rule = rule;
+    }
+
     /**
      * @param size - количесвто генерируемых элеменов / размер возвращаемого списка
      * @return список чисел, которые генерируются на основе правила <b>rule</b>
@@ -36,5 +45,12 @@ public class RandomGenerator {
      * каждое число списка генерируется методом, определенным в правиле
      */
     public List<Integer> nextInts(int size) {
+        List<Integer> resultList = new ArrayList<>();
+
+        for (int i = 1; i <= size; i++) {
+            int generatedNumber = rule.nextInt();
+            resultList.add(generatedNumber);
+        }
+        return resultList;
     }
 }
