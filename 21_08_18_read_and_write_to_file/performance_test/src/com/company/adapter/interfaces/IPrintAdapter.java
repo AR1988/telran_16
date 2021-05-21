@@ -1,4 +1,4 @@
-package com.company.adapter;
+package com.company.adapter.interfaces;
 
 import java.io.IOException;
 

@@ -1,5 +1,7 @@
 package com.company.adapter;
 
+import com.company.adapter.interfaces.IPrintAdapter;
+
 import java.io.PrintStream;
 
 public class PrintStreamAdapter implements IPrintAdapter {

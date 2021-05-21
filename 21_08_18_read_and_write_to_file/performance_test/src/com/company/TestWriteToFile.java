@@ -1,7 +1,7 @@
 package com.company;
 
 
-import com.company.adapter.IPrintAdapter;
+import com.company.adapter.interfaces.IPrintAdapter;
 
 public class TestWriteToFile {
 

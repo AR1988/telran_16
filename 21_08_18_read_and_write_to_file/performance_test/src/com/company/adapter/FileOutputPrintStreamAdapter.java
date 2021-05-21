@@ -1,5 +1,7 @@
 package com.company.adapter;
 
+import com.company.adapter.interfaces.IPrintAdapter;
+
 import java.io.FileOutputStream;
 import java.io.IOException;
 

@@ -1,7 +1,8 @@
 package com.company.adapter;
 
+import com.company.adapter.interfaces.IPrintAdapter;
+
 import java.io.BufferedWriter;
-import java.io.FileWriter;
 import java.io.IOException;
 
 public class BufferedWriterAdapter implements IPrintAdapter {
