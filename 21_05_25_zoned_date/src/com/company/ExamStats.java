@@ -104,7 +104,7 @@ public class ExamStats {
             while ((line = bufferedReader.readLine()) != null) {
                 list.add(line);
             }
-
+            bufferedReader.close();
         } catch (IOException e) {
             System.out.println(e.getMessage());
         }
