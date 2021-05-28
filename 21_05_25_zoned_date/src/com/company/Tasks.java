@@ -27,8 +27,8 @@ public class Tasks {
 //        task4();
 //        task5("31_09_21-23_55");
 //        task6();
-//        task7(LocalDate.now());
-        task8();
+        task7(LocalDate.now());
+//        task8();
     }
 
     //    Узнать время в NY относительно времени в Берлине. К примеру, в Берлине 16:00 то в NY 10:00 и наоборот
@@ -50,14 +50,15 @@ public class Tasks {
     }
 
     //    Посчитать сколько целых недель в месяце (целая неделя это неделя с пн вс)
-    //TODO попроавить решение
     private static void task7(LocalDate date) {
         LocalDate firstDayOfMonth = date.with(TemporalAdjusters.firstDayOfMonth());
-        LocalDate firstMoOfMonth = firstDayOfMonth.with(TemporalAdjusters.nextOrSame(DayOfWeek.SATURDAY));
+        LocalDate firstMoOfMonth = firstDayOfMonth.with(TemporalAdjusters.nextOrSame(DayOfWeek.MONDAY));
+
         LocalDate lastDayOfMonth = date.with(TemporalAdjusters.lastDayOfMonth());
-        LocalDate lastSundayOfMonth = lastDayOfMonth.with(TemporalAdjusters.previousOrSame(DayOfWeek.FRIDAY));
-        long diff = ChronoUnit.WEEKS.between(firstMoOfMonth, lastSundayOfMonth);
-        System.out.println(diff);
+        LocalDate lastSundayOfMonth = lastDayOfMonth.with(TemporalAdjusters.previousOrSame(DayOfWeek.SUNDAY)).plusDays(1);
+
+        long diffW = ChronoUnit.WEEKS.between(firstMoOfMonth, lastSundayOfMonth);
+        System.out.println(diffW);
     }
 
     //Есть дата 2021 03 31 23:55. Задача : получить дату «2022 12 31 10:00», прибавив к первой дате необходимое количество
