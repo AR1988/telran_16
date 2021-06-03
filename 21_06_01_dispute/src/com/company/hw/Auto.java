@@ -1,19 +1,21 @@
 package com.company.hw;
 
-public class Auto {
+public class Auto  {
 
-    String name;
+   private final String name;
 
-    int minLoopTime;
-    int maxLoopTime;
+    private final int minLoopTime;
+    private final int maxLoopTime;
 
-    int minPitStopTime;
-    int maxPitStopTime;
+    private final int minPitStopTime;
+    private final int maxPitStopTime;
 
     public Auto(String name, int minLoopTime, int maxLoopTime, int minPitStopTime, int maxPitStopTime) {
         this.name = name;
+
         this.minLoopTime = minLoopTime;
         this.maxLoopTime = maxLoopTime;
+
         this.minPitStopTime = minPitStopTime;
         this.maxPitStopTime = maxPitStopTime;
     }
