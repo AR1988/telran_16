@@ -29,9 +29,9 @@ public class Game implements Runnable {
             if (i % 2 == 0) {
                 int pitStopTime = getRandomTime(auto.getMinPitStopTime(), auto.getMaxPitStopTime());
                 sleep(pitStopTime);
-                System.out.println("Auto: " + auto.getName()
-                        + " loop nr.: " + i + " Pit stop time: "
-                        + pitStopTime);
+//                System.out.println("Auto: " + auto.getName()
+//                        + " loop nr.: " + i + " Pit stop time: "
+//                        + pitStopTime);
             }
 
             int loopTime = getRandomTime(auto.getMinLoopTime(), auto.getMaxLoopTime());
@@ -44,12 +44,15 @@ public class Game implements Runnable {
         for (Long time : loopTimes)
             totalTime += time;
 
-        FinishInfo finishInfo = new FinishInfo(auto.getName(), totalTime);
+        synchronized (resultInfos) {
+            FinishInfo finishInfo = new FinishInfo(auto.getName(), totalTime);
             resultInfos.add(finishInfo);
-        System.out.println("---FINISH---");
-        System.out.println("Auto: " + auto.getName() + loopTimes);
-        System.out.println("Auto: " + auto.getName()
-                + " total time: " + totalTime);
+        }
+
+//        System.out.println("---FINISH---");
+//        System.out.println("Auto: " + auto.getName() + loopTimes);
+//        System.out.println("Auto: " + auto.getName()
+//                + " total time: " + totalTime);
     }
 
     public void sleep(int ms) {

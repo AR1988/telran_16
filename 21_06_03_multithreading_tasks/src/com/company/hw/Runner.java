@@ -5,8 +5,8 @@ import java.util.List;
 
 public class Runner {
 
-    final static int AUTOS_NUMBER = 10;
-    final static int LOOPS_NUMBER = 5;
+    final static int AUTOS_NUMBER = 1000;
+    final static int LOOPS_NUMBER = 1;
 
     public static void main(String[] args) throws InterruptedException {
         List<Auto> autoList = new ArrayList<>();
@@ -33,8 +33,8 @@ public class Runner {
         }
 
         System.out.println("\t\tsize: " + finishInfos.size());
-        for (FinishInfo finishInfo : finishInfos) {
-            System.out.println("auto: " + finishInfo.getName() + " result: " + finishInfo.getTotalResult());
-        }
+//        for (FinishInfo finishInfo : finishInfos) {
+//            System.out.println("auto: " + finishInfo.getName() + " result: " + finishInfo.getTotalResult());
+//        }
     }
 }

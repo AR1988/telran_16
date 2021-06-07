@@ -10,9 +10,6 @@ public class FinishInfo {
         this.totalResult = totalResult;
     }
 
-    public FinishInfo() {
-    }
-
     public String getName() {
         return name;
     }
