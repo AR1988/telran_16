@@ -102,4 +102,17 @@ public class GroupingByTest {
         assertEquals(1800L, (long) map.get("Google"));
         assertEquals(4000, (long) map.get("Samsung"));
     }
+
+    //метод коллектора summing Collectors.counting();
+    @Test
+    public void test_countingByPrice() {
+        Map<String, Long> map = phones
+                .stream()
+                .collect(
+                        Collectors.groupingBy(phone -> phone.getCompany(), Collectors.counting()));
+
+        assertEquals(3, map.size());
+        assertEquals(2, (long) map.get("Google"));
+        assertEquals(3, (long) map.get("Samsung"));
+    }
 }
