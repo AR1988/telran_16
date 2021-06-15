@@ -1,6 +1,7 @@
 package com.company.grouping;
 
 import com.company.grouping.model.Phone;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.util.Arrays;
@@ -15,17 +16,21 @@ import static org.junit.Assert.assertEquals;
 
 public class GroupingByTest {
 
-    List<Phone> phones = Arrays.asList(
-            new Phone("IPHONE X", "Apple", 600),
-            new Phone("IPHONE 8", "Apple", 400),
+    List<Phone> phones;
 
-            new Phone("Pixel 4a", "Google", 800),
-            new Phone("Pixel 5", "Google", 1_000),
+    @Before
+    public void init() {
+        phones = Arrays.asList(
+                new Phone("IPHONE X", "Apple", 600),
+                new Phone("IPHONE 8", "Apple", 400),
 
-            new Phone("SGS-10+", "Samsung", 1_200),
-            new Phone("SGS-10+", "Samsung", 2_200),
-            new Phone("SGS-8", "Samsung", 600)
-    );
+                new Phone("Pixel 4a", "Google", 800),
+                new Phone("Pixel 5", "Google", 1_000),
+
+                new Phone("SGS-10+", "Samsung", 1_200),
+                new Phone("SGS-10+", "Samsung", 2_200),
+                new Phone("SGS-8", "Samsung", 600));
+    }
 
     //группировка телефонов по компаниям
     @Test
@@ -38,7 +43,7 @@ public class GroupingByTest {
 
         assertEquals(2, map.get("Google").size());
         assertEquals(2, map.get("Apple").size());
-        assertEquals(2, map.get("Samsung").size());
+        assertEquals(3, map.get("Samsung").size());
 
 //        System.out.println("Apple: " + map.get("Apple"));
 //        System.out.println("Google: " + map.get("Google"));
@@ -54,7 +59,7 @@ public class GroupingByTest {
 
         assertEquals(6, map.size());
         assertEquals(1, map.get("IPHONE X").size());
-        assertEquals(1, map.get("SGS-10+").size());
+        assertEquals(2, map.get("SGS-10+").size());
         assertEquals(1, map.get("IPHONE 8").size());
         System.out.println(map);
     }
@@ -66,9 +71,10 @@ public class GroupingByTest {
                 .stream()
                 .collect(Collectors.groupingBy(phone -> phone.getPrice()));
 
-        assertEquals(5, map.size());
+        assertEquals(6, map.size());
         assertEquals(2, map.get(600).size());
         assertEquals(1, map.get(800).size());
+        assertEquals(1, map.get(400).size());
     }
 
     //partitioningBy
@@ -80,7 +86,7 @@ public class GroupingByTest {
 
         assertEquals(2, map.size());
         assertEquals(4, map.get(false).size());
-        assertEquals(2, map.get(true).size());
+        assertEquals(3, map.get(true).size());
     }
 
     //метод коллектора summing Collectors.summing();
@@ -90,15 +96,10 @@ public class GroupingByTest {
                 .stream()
                 .collect(
                         Collectors.groupingBy(phone -> phone.getCompany(), Collectors.summingInt(value -> value.getPrice()))
-//                        Collectors.groupingBy(phone -> phone.getName(), Collectors.summingInt(value -> value.getPrice()))
                 );
 
         assertEquals(3, map.size());
         assertEquals(1800L, (long) map.get("Google"));
-
-        System.out.println(map);
-
+        assertEquals(4000, (long) map.get("Samsung"));
     }
-
-
 }
