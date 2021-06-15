@@ -108,8 +108,7 @@ public class GroupingByTest {
     public void test_countingByPrice() {
         Map<String, Long> map = phones
                 .stream()
-                .collect(
-                        Collectors.groupingBy(phone -> phone.getCompany(), Collectors.counting()));
+                .collect(Collectors.groupingBy(phone -> phone.getCompany(), Collectors.counting()));
 
         assertEquals(3, map.size());
         assertEquals(2, (long) map.get("Google"));
