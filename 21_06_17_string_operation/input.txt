@@ -1,0 +1,8 @@
+1TextToUpperCase#to_upperCase
+2TextToLowerCase#to_lowerCase
+3TextToLowerCase#to_lowerCase
+4TextToUpperCase#to_upperCase
+5TextToLowerCase#to_lowerCase
+6TextToLowerCase#invalidOperation   (-error)
+7TextToLowerCase#                   (-error)
+8TextToUpperCase#to_upperCase
