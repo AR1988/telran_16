@@ -18,7 +18,6 @@ public class Application {
 
         BufferedReader bufferedReader = new BufferedReader(new FileReader(INPUT));
         PrintWriter writer = new PrintWriter(new FileOutputStream(OUTPUT));
-//      TODO: (can be hard*) change List<String> to Queue<List>
         List<String> source = new ArrayList<>();
 
         List<String> operationPaths = configReader.getOperationsPaths();
