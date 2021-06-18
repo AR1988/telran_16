@@ -5,6 +5,7 @@ import com.company.operation.OperationContext;
 
 import java.io.PrintWriter;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
 
 public class Consumer implements Runnable {
 
@@ -14,9 +15,9 @@ public class Consumer implements Runnable {
 
     private final OperationContext operationContext;
     private final PrintWriter printWriter;
-    private final List<String> source;
+    private final BlockingQueue<String> source;
 
-    public Consumer(OperationContext operationContext, PrintWriter printWriter, List<String> source) {
+    public Consumer(OperationContext operationContext, PrintWriter printWriter, BlockingQueue<String> source) {
         this.operationContext = operationContext;
         this.printWriter = printWriter;
         this.source = source;
@@ -24,9 +25,22 @@ public class Consumer implements Runnable {
 
     @Override
     public void run() {
-        for (String s : source) {
-            String resultLine = handleLine(s);
-            printWriter.println(resultLine);
+        while (true) {
+            try {
+                System.out.println(Thread.currentThread().getName());
+                System.out.println("size: " + source.size());
+                if (source.size() == 0) {
+                    return;
+                }
+                String str = source.take();
+                System.out.println(Thread.currentThread().getName() + " line: " + str);
+
+                String resultLine = handleLine(str);
+                printWriter.println(resultLine);
+
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 

@@ -6,7 +6,11 @@ import com.company.operation.OperationContext;
 import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
 public class Application {
 
@@ -20,22 +24,31 @@ public class Application {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(INPUT));
         PrintWriter writer = new PrintWriter(new FileOutputStream(OUTPUT));
 
-        List<String> source = new ArrayList<>();
+        BlockingQueue<String> source = new LinkedBlockingQueue<>();
         Supplier supplier = new Supplier(source, bufferedReader);
         Thread supplierThread = new Thread(supplier);
         supplierThread.start();
         supplierThread.join();
 
         OperationContext operationContext = new OperationContext(operationPaths);
-
         Consumer consumer = new Consumer(operationContext, writer, source);
-        Thread consumerThread = new Thread(consumer);
-        consumerThread.start();
-        consumerThread.join();
+        List<Thread> consumerThreads = Arrays.asList(
+                new Thread(consumer),
+                new Thread(consumer),
+                new Thread(consumer),
+                new Thread(consumer),
+                new Thread(consumer)
+        );
+
+        for (Thread thread : consumerThreads)
+            thread.start();
+
+        for (Thread thread : consumerThreads)
+            thread.join();
 
         bufferedReader.close();
-        writer.close();
 
-        System.out.println(source);
+        writer.flush();
+        writer.close();
     }
 }
