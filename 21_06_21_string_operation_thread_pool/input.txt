@@ -1,0 +1,10 @@
+1TextToUpperCase#to_upperCase
+2TextToLowerCase#to_lowerCase
+3TextToLowerCase#to_lowerCase
+4TextToUpperCase#to_upperCase
+5TextToLowerCase#to_lowerCase
+6TextToLowerCase#invalidOperation
+7TextToLowerCase#
+8TextToUpperCase#to_upperCase
+9to reverse#reverse
+10to reverse#add_suffix
