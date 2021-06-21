@@ -17,11 +17,17 @@ public class Application {
 
     public static void main(String[] args) throws IOException, InterruptedException, ClassNotFoundException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
 
+        System.out.println(args[0]);
+        System.out.println(args[1]);
+
+        String inputFile = args.length != 2 ? INPUT : args[0];
+        String outputFile = args.length != 2 ? OUTPUT : args[1];
+
         ConfigReader configReader = new ConfigReader("config.props");
         List<String> operationPaths = configReader.getOperationsPaths();
 
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(INPUT));
-        PrintWriter writer = new PrintWriter(new FileOutputStream(OUTPUT));
+        BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile));
+        PrintWriter writer = new PrintWriter(new FileOutputStream(outputFile));
 
         ExecutorService executorService = Executors.newFixedThreadPool(10);
         OperationContext operationContext = new OperationContext(operationPaths);
