@@ -1,11 +1,11 @@
 package com.company;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintStream;
+
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class TcpServer {
 
@@ -14,18 +14,13 @@ public class TcpServer {
     public static void main(String[] args) throws IOException {
 
         ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
-
         System.out.println("Server ready ...");
+        ExecutorService executor = Executors.newFixedThreadPool(5);
 
-        Socket socket = serverSocket.accept();
-        System.out.println("Connected with: " + socket.getInetAddress());
-
-        PrintStream socketOutput = new PrintStream(socket.getOutputStream());
-        BufferedReader socketInput = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-        String res = socketInput.readLine();
-        socketOutput.println("Hello from server: " + res);
-
-        serverSocket.close();
+        while (true) {
+            System.out.println("Ready to new connection");
+            Socket socket = serverSocket.accept();
+            executor.execute(new MyTask(socket));
+        }
     }
 }
