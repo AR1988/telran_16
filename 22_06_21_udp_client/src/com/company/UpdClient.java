@@ -20,7 +20,6 @@ public class UpdClient {
 
         String toSend = "Hello";
 
-
         byte[] outData = toSend.getBytes();
         DatagramPacket datagramPacketOut = new DatagramPacket(
                 outData,
