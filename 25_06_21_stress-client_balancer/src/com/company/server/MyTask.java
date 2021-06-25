@@ -1,4 +1,4 @@
-package com.company;
+package com.company.server;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,9 +21,12 @@ public class MyTask implements Runnable {
             String lineFromClient;
 
             while ((lineFromClient = fromClient.readLine()) != null) {
-                String response = "Response from server: " + lineFromClient;
+                String response = "Msg from server: " + lineFromClient;
                 toClient.println(response);
             }
+
+            String response = "Msg from server: " + lineFromClient;
+            toClient.println(response);
 
         } catch (IOException e) {
             e.printStackTrace();
