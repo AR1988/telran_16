@@ -20,6 +20,7 @@ public class UpdClient {
 
         String toSend = "Hello";
 
+
         byte[] outData = toSend.getBytes();
         DatagramPacket datagramPacketOut = new DatagramPacket(
                 outData,
@@ -29,11 +30,13 @@ public class UpdClient {
         );
 
         while (true) {
+            //send message
             Thread.sleep(1500);
             udpClient.send(datagramPacketOut);
 
             byte[] dataIn = new byte[dataSize];
             DatagramPacket paketIn = new DatagramPacket(dataIn, dataSize);
+            //waiting answer
             udpClient.receive(paketIn);
             System.out.println(new String(dataIn, 0, paketIn.getLength()));
         }
