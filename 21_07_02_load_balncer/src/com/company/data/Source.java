@@ -1,6 +1,9 @@
 package com.company.data;
 
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class Source {
@@ -10,8 +13,8 @@ public class Source {
     public synchronized ServerInfo getBestServerData() {
         return source
                 .stream()
-                .
-                //найти из списка лучший сервер (по полю загружености) и вернуть его. Используйте Comparator;
+                .min(Comparator.comparingInt(ServerInfo::getServerLoad))
+                .orElse(null);
     }
 
     public synchronized void updateServerInfo(ServerInfo serverInfo) {
@@ -21,6 +24,7 @@ public class Source {
 
     public void removeUnused(int millis) {
         //удалить объекты из списка, которые обновлялись последний раз больше чем (millis) мс назад
-        source.removeIf(//some predicate here);
+        source.removeIf(serverInfo ->
+                ChronoUnit.MILLIS.between(serverInfo.getLastUpdateTime(), LocalDateTime.now()) > millis);
     }
 }

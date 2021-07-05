@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.Objects;
 
 public class ServerInfo {
+
     private String host;
     private int port;
     private int serverLoad;
@@ -21,24 +22,12 @@ public class ServerInfo {
         return host;
     }
 
-    public void setHost(String host) {
-        this.host = host;
-    }
-
     public int getPort() {
         return port;
     }
 
-    public void setPort(int port) {
-        this.port = port;
-    }
-
     public int getServerLoad() {
         return serverLoad;
-    }
-
-    public void setServerLoad(int serverLoad) {
-        this.serverLoad = serverLoad;
     }
 
     public LocalDateTime getLastUpdateTime() {
@@ -50,7 +39,7 @@ public class ServerInfo {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ServerInfo that = (ServerInfo) o;
-        return port == that.port && Objects.equals(host, that.host);
+        return this.port == that.port && Objects.equals(this.host, that.host);
     }
 
     @Override

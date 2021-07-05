@@ -14,6 +14,14 @@ public class Cleaner implements Runnable {
 
     @Override
     public void run() {
-    //TODO каждые (periodMillis) мс запускать удаление из списка не активных серверов (...removeUnused(periodMillis))
+        //каждые (periodMillis) мс запускать удаление из списка не активных серверов (...removeUnused(periodMillis))
+        while (true) {
+            try {
+                Thread.sleep(periodMillis);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            source.removeUnused(periodMillis);
+        }
     }
 }
