@@ -46,6 +46,7 @@ public class UdpLoadBalancerListener implements Runnable {
         int serverPort = Integer.parseInt(lines[1]);
 
         ServerInfo serverInfo = new ServerInfo(serverAddress, serverPort);
+        System.out.println(serverAddress + ":" + serverPort);
 
         source.updateServerInfo(serverInfo);
     }

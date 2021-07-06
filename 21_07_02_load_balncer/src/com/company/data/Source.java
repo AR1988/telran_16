@@ -22,6 +22,7 @@ public class Source {
         source.add(serverInfo);
 
         System.out.println(source.size());
+        System.out.println(source);
     }
 
     public void removeUnused(int millis) {

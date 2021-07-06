@@ -46,4 +46,14 @@ public class ServerInfo {
     public int hashCode() {
         return Objects.hash(host, port);
     }
+
+    @Override
+    public String toString() {
+        return "ServerInfo{" +
+                "host='" + host + '\'' +
+                ", port=" + port +
+                ", serverLoad=" + serverLoad +
+                ", lastUpdateTime=" + lastUpdateTime +
+                '}';
+    }
 }
