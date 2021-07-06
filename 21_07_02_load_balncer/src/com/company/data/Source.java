@@ -20,6 +20,8 @@ public class Source {
     public synchronized void updateServerInfo(ServerInfo serverInfo) {
         source.remove(serverInfo);
         source.add(serverInfo);
+
+        System.out.println(source.size());
     }
 
     public void removeUnused(int millis) {

@@ -2,21 +2,31 @@ package com.company;
 
 import com.company.data.Source;
 
-public class Main {
-    //TODO config reader
+import java.io.IOException;
 
-    public static void main(String[] args) {
+public class Main {
+
+    private static final String DEFAULT_PROPS_PATH = "config/application.props";
+
+    public static void main(String[] args) throws IOException {
+        String propsPath = args.length > 0 ? args[0] : DEFAULT_PROPS_PATH;
+
+        ConfigReader properties = new ConfigReader(propsPath);
+
+        int udpServerPort = Integer.parseInt(properties.getProperty("udp.balancer.port"));
+        int clearDelay = Integer.parseInt(properties.getProperty("clear.delay"));
+        int gateWayPort = Integer.parseInt(properties.getProperty("udp.gateway.port"));
+        String gateWayHost = properties.getProperty("gateway.host");
+
         Source source = new Source();
 
-        //запуск чистилщика в отдельном потоке
-        //Каждую секунду будут удаляться из списка сервера, которые не активны более 1.5 секунды
-        Cleaner cleaner = new Cleaner(source, 1500);
+        Cleaner cleaner = new Cleaner(source, clearDelay);
         new Thread(cleaner).start();
 
-        UdpServerListener udpServerListener = new UdpServerListener(3010, source);
+        UdpServerListener udpServerListener = new UdpServerListener(udpServerPort, source);
         new Thread(udpServerListener).start();
 
-        UdpGateWaySender udpGateWaySender = new UdpGateWaySender("localhost", 3001, source);
+        UdpGateWaySender udpGateWaySender = new UdpGateWaySender(gateWayHost, gateWayPort, source);
         new Thread(udpGateWaySender).start();
     }
 }
