@@ -29,7 +29,7 @@ public class Application {
         BufferedReader bufferedReader = new BufferedReader(new FileReader(inputFile));
         PrintWriter writer = new PrintWriter(new FileOutputStream(outputFile));
 
-        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        ExecutorService executorService = Executors.newFixedThreadPool(1);
         OperationContext operationContext = new OperationContext(operationPaths);
 
         Supplier supplier = new Supplier(bufferedReader, writer, executorService, operationContext);

@@ -3,16 +3,22 @@ package com.example.string_operation;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
+@Component
 public class LineReader implements ApplicationRunner {
 
-    @Value()
+    @Value("${input.file}")
     private String filePath;
-//    TODO внедрить класс StringHandle
+    private final StringHandle stringHandle;
+
+    public LineReader(StringHandle stringHandle) {
+        this.stringHandle = stringHandle;
+    }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -21,9 +27,10 @@ public class LineReader implements ApplicationRunner {
         String line;
         try {
             while ((line = bufferedReader.readLine()) != null) {
-//TODO отправить просченую строку на обработку (StringHandle   .handleLine(line))
+                stringHandle.handleLine(line);
             }
-            System.out.println("END");
+
+            bufferedReader.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
