@@ -1,12 +1,15 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam culpa earum est excepturi inventore laborum quae
-    quis totam voluptatibus! Aliquid consequatur earum excepturi explicabo inventore iste minus numquam perferendis,
-    recusandae.</p>
+<div>
+
+    <p>Name is: <span th:text="${userName}"></span></p>
+    <p th:text="${text}">Lorem text:</p>
+
+</div>
 </body>
 </html>
