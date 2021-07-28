@@ -1,5 +1,6 @@
 package com.example.hello_web.controller;
 
+import com.example.hello_web.dto.PersonDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,7 +8,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
@@ -30,12 +30,12 @@ public class HelloWebController {
     @GetMapping("/hello2/{number}")
     public String c(@PathVariable int number, Model model) {
 
-        List<String> strings = new ArrayList<>();
+        List<PersonDto> persons = new ArrayList<>();
         for (int i = 0; i < number; i++) {
-            strings.add("str" + i);
+            persons.add(new PersonDto("Max", "Mustermann", 18 + i));
         }
 
-        model.addAttribute("strings", strings);
+        model.addAttribute("persons", persons);
 
         return "hello";
     }

@@ -12,8 +12,18 @@
 <div class="row" style="margin-top: 50px; margin-left: 15%">
     <div class="col s6">
         <div class="collection">
-            <div class="collection-item" th:each="str: ${strings}" style="cursor: pointer">
-                <span th:text="${str}"></span>
+            <div class="collection-item" th:each="person: ${persons}" style="cursor: pointer">
+                <div class="row">
+                    <div class="col s6">
+                        <p th:text="${person.age}"></p>
+                    </div>
+                    <div class="col s3">
+                        <a th:href="'edit/' + ${person.age}">Edit</a>
+                    </div>
+                    <div class="col s3">
+                        <a th:href="'del/' + ${person.age}">remove</a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
