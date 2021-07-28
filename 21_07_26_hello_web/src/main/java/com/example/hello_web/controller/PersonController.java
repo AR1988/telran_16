@@ -64,4 +64,6 @@ public class PersonController {
 
         persons.add(personToAdd);
     }
+
+//    todo метод удаления
 }
