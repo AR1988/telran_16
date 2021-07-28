@@ -65,5 +65,5 @@ public class PersonController {
         persons.add(personToAdd);
     }
 
-//    todo метод удаления
+//    todo метод удаления (delete by id) и обновление по id (edit by id)
 }
