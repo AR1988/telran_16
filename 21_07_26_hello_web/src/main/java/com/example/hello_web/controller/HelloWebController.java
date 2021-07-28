@@ -5,9 +5,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
-import javax.websocket.server.PathParam;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,19 +27,15 @@ public class HelloWebController {
     }
 
     // api/
-    @GetMapping("/hello2/{userName}")
-    public String c(@PathVariable(name = "userName") String name, Model model) {
-        String str = "Name from url: " + name.toUpperCase();
+    @GetMapping("/hello2/{number}")
+    public String c(@PathVariable int number, Model model) {
 
-        model.addAttribute("userName", str);
-        model.addAttribute("text", "Lorem ipsum dolor sit amet, consectetur adipisicing elit." +
-                " Ab, ad corporis dolor dolorum error esse id inventore ipsa" +
-                "    labore laboriosam laudantium libero necessitatibus perferendis," +
-                " porro quam rerum vel? Mollitia, perspiciatis.");
+        List<String> strings = new ArrayList<>();
+        for (int i = 0; i < number; i++) {
+            strings.add("str" + i);
+        }
 
-        List<String> strings = Arrays.asList("str1", "str2");
         model.addAttribute("strings", strings);
-
 
         return "hello";
     }
