@@ -2,19 +2,20 @@ package com.example.hello_web.controller;
 
 import com.example.hello_web.dto.PersonDto;
 import com.example.hello_web.entity.Person;
+import com.example.hello_web.exeption.EntityNotFoundException;
 import com.example.hello_web.mapper.PersonMapper;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Controller
+@RestController
 @RequestMapping("/api")
 public class PersonController {
 
+    private static final String ENTITY_NOT_FOUND_MSG = "Entity not found";
     private final PersonMapper personMapper;
 
     private List<Person> persons = new ArrayList<>();
@@ -23,19 +24,16 @@ public class PersonController {
         this.personMapper = personMapper;
     }
 
-    @ResponseBody
     @GetMapping("/person/{id}")
     @ResponseStatus(HttpStatus.OK)
     public PersonDto getPersonById(@PathVariable(name = "id", required = true) int personId) {
         Person person = persons.stream()
                 .filter(person1 -> person1.getId() == personId)
                 .findFirst()
-                .get();
-
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MSG));
         return personMapper.toPersonDto(person);
     }
 
-    @ResponseBody
     @GetMapping("/persons")
     @ResponseStatus(HttpStatus.OK)
     public List<PersonDto> getPersons() {
@@ -45,7 +43,6 @@ public class PersonController {
                 .collect(Collectors.toList());
     }
 
-    @ResponseBody
     @PostMapping("/person")
     @ResponseStatus(HttpStatus.CREATED)
     public void addPerson(@RequestBody PersonDto personDto) {
@@ -61,9 +58,34 @@ public class PersonController {
         }
 
         personToAdd.setId(id);
-
         persons.add(personToAdd);
     }
 
-//    todo метод удаления (delete by id) и обновление по id (edit by id)
+    @DeleteMapping("/person/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteById(@PathVariable(name = "id") long userId) {
+
+        boolean isRemoved = persons.removeIf(person -> person.getId() == userId);
+        if (!isRemoved) {
+            throw new EntityNotFoundException(ENTITY_NOT_FOUND_MSG);
+        }
+    }
+
+
+    @PutMapping("/person/{id}")
+    public void editById(@PathVariable(name = "id") long userId, @RequestBody PersonDto personDto) {
+        Person personToEdit = persons.stream()
+                .filter(person -> person.getId() == userId)
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException(ENTITY_NOT_FOUND_MSG));
+
+        if (personDto.getAge() > 0)
+            personToEdit.setAge(personDto.getAge());
+
+        if (personDto.getFirstName() != null)
+            personToEdit.setFirstName(personDto.getFirstName());
+
+        if (personDto.getLastName() != null)
+            personToEdit.setLastName(personDto.getLastName());
+    }
 }
