@@ -1,13 +1,15 @@
 package com.example.contacts.controller;
 
-import com.example.contacts.dto.ContactToAddDto;
 import com.example.contacts.dto.ContactToDisplayDto;
 import com.example.contacts.entity.Contact;
 import com.example.contacts.mapper.ContactMapper;
 import com.example.contacts.service.ContactService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -66,13 +68,12 @@ public class ContactController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String saveContact(@ModelAttribute ContactToAddDto contactToAddDto,
-                              @RequestParam(name = "id", required = false) int contactId) {
+    public String saveContact(@ModelAttribute Contact contact) {
 
-        if (contactId > 0)
-            service.addContact(contactToAddDto.firstName, contactToAddDto.lastName, contactToAddDto.age);
+        if (contact.getId() > 0)
+            service.editContact(contact.getFirstName(), contact.getLastName(), contact.getAge(), contact.getId());
         else
-            service.editContact(contactToAddDto.firstName, contactToAddDto.lastName, contactToAddDto.age, contactId);
+            service.addContact(contact.getFirstName(), contact.getLastName(), contact.getAge());
 
         return "redirect:/contacts";
     }
@@ -82,5 +83,4 @@ public class ContactController {
         service.deleteById(contactId);
         return "redirect:/contacts";
     }
-
 }
