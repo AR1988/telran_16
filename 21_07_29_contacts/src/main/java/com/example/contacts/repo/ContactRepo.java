@@ -5,15 +5,15 @@ import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-//TODO дописать все методы
 public class ContactRepo implements IContractRepo {
 
     private List<Contact> contacts = new ArrayList<>();
 
     @Override
-    public void save(Contact contact) {
+    public void add(Contact contact) {
         contact.setId(generateId());
         contacts.add(contact);
     }
@@ -24,18 +24,16 @@ public class ContactRepo implements IContractRepo {
     }
 
     @Override
-    public Contact getById(int id) {
-        return null;
+    public Optional<Contact> getById(int id) {
+        return contacts
+                .stream()
+                .filter(contact -> contact.getId() == id)
+                .findFirst();
     }
 
     @Override
-    public void editById(int id) {
-
-    }
-
-    @Override
-    public void deleteById(int id) {
-
+    public void delete(Contact contact) {
+        contacts.remove(contact);
     }
 
     private int generateId() {

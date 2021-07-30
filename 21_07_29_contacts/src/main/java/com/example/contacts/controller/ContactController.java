@@ -1,42 +1,67 @@
 package com.example.contacts.controller;
 
 import com.example.contacts.dto.ContactToAddDto;
+import com.example.contacts.dto.ContactToDisplayDto;
+import com.example.contacts.entity.Contact;
+import com.example.contacts.mapper.ContactMapper;
 import com.example.contacts.service.ContactService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Controller
 public class ContactController {
 
-    private ContactService service;
+    private final ContactService service;
+    private final ContactMapper contactMapper;
 
-    public ContactController(ContactService service) {
+    public ContactController(ContactService service, ContactMapper contactMapper) {
         this.service = service;
+        this.contactMapper = contactMapper;
     }
 
     @RequestMapping(value = "/contacts", method = RequestMethod.GET)
 //    @GetMapping("contacts")
-    public String contacts() {
-        //TODO передать List<ContactToDisplayDto>
+    public String contacts(Model model) {
+
+        List<ContactToDisplayDto> contactToDisplayDtos = service
+                .getAllContacts()
+                .stream()
+                .map(contact -> contactMapper.toDto(contact))
+                .collect(Collectors.toList());
+
+        model.addAttribute("contacts", contactToDisplayDtos);
+
         return "contacts";
     }
 
     @RequestMapping(value = "/contact-info/{id}", method = RequestMethod.GET)
-    public String contactDetail(@PathVariable(name = "id") int contactId) {
-        //TODO передать ContactToDisplayDto
+    public String contactDetail(@PathVariable(name = "id") int contactId, Model model) {
+
+        ContactToDisplayDto contactToDisplayDto = contactMapper.toDto(service.getById(contactId));
+        model.addAttribute("contact", contactToDisplayDto);
+
         return "contact-details";
     }
 
     @RequestMapping(value = "/form", method = RequestMethod.GET)
-    public String contactForm() {
+    public String contactForm(Model model) {
+
+        model.addAttribute("contact", new Contact());
 
         return "contact-form";
     }
 
     @RequestMapping(value = "/edit/{id}", method = RequestMethod.GET)
-    public String editContact(@PathVariable(name = "id") int contactId) {
-        //TODO передать ContactToDisplayDto
+    public String editContact(@PathVariable(name = "id") int contactId, Model model) {
+
+        Contact contact = service.getById(contactId);
+        model.addAttribute("contact", contact);
+
         return "contact-form";
     }
 
@@ -45,18 +70,16 @@ public class ContactController {
                               @RequestParam(name = "id", required = false) int contactId) {
 
         if (contactId > 0)
-            //        TODO сохранить контакт в дб
-            service.save(contactToAddDto);
+            service.addContact(contactToAddDto.firstName, contactToAddDto.lastName, contactToAddDto.age);
         else
-            //        TODO обновить контакт в дб
-            service.edit(contactToAddDto, contactId);
+            service.editContact(contactToAddDto.firstName, contactToAddDto.lastName, contactToAddDto.age, contactId);
 
         return "redirect:/contacts";
     }
 
     @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
     public String deleteContact(@PathVariable(name = "id") int contactId) {
-//        TODO удалить контакт в дб
+        service.deleteById(contactId);
         return "redirect:/contacts";
     }
 

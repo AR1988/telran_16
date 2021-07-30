@@ -4,7 +4,7 @@ public class ContactToAddDto {
 
     public String firstName;
     public String lastName;
-    public int age;
+    public  int age;
 
     public ContactToAddDto(String firstName, String lastName, int age) {
         this.firstName = firstName;

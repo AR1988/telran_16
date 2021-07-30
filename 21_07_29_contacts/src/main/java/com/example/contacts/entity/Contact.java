@@ -16,6 +16,9 @@ public class Contact {
         this.age = age;
     }
 
+    public Contact() {
+    }
+
     public int getId() {
         return id;
     }
