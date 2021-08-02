@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
@@ -8,7 +8,24 @@
     <title>Contacts</title>
 </head>
 <body>
-<h1>contacts page</h1>
+
+<a href="./form" class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i>Add
+    contact</a>
+
+<ul class="collection with-header">
+    <li class="collection-header"><h6>Contacts</h6></li>
+    <li class="collection-item" th:each="contact: ${contacts}">
+        <a th:text="${contact.firstName} + ' ' + ${contact.lastName}" th:href="'contact-info/' + ${contact.id}"></a>
+        <div style="padding-bottom: 20px">
+            <a th:href="'edit/' + ${contact.id}" class="secondary-content">
+                <i class="material-icons">edit</i>
+            </a>
+            <a th:href="'delete/' + ${contact.id}" class="secondary-content">
+                <i class="material-icons">delete</i>
+            </a>
+        </div>
+    </li>
+</ul>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 </body>

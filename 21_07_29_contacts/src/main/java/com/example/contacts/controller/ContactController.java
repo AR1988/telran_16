@@ -78,7 +78,7 @@ public class ContactController {
         return "redirect:/contacts";
     }
 
-    @RequestMapping(value = "/delete/{id}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
     public String deleteContact(@PathVariable(name = "id") int contactId) {
         service.deleteById(contactId);
         return "redirect:/contacts";
