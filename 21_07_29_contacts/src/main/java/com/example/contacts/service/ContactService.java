@@ -43,6 +43,12 @@ public class ContactService {
             contact.setAge(age);
     }
 
+//    TODO дописать
+    public List<Contact> searchByName(String name) {
+        return
+    }
+
+
     public void deleteById(int contactId) {
         Contact contact = repo.getById(contactId)
                 .orElseThrow(() -> new ContactNotFoundException(CONTACT_NOT_FOUND));

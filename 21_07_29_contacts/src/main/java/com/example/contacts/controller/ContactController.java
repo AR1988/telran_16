@@ -41,6 +41,11 @@ public class ContactController {
         return "contacts";
     }
 
+//    TODO создать новый эндпоинт, который будет обрабатывать поисковой запрос
+//     и возвращать темплейт с отфильтрованым списком
+//     @RequestMapping(value = "contacts/search", method = RequestMethod.POST)
+
+
     @RequestMapping(value = "/contact-info/{id}", method = RequestMethod.GET)
     public String contactDetail(@PathVariable(name = "id") int contactId, Model model) {
 

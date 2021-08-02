@@ -8,8 +8,8 @@
     <title>Contact form</title>
 </head>
 <body>
-<h1>Contact form page</h1>
-<div class="row" style="margin-left: 25%; margin-right: 25%">
+
+<div class="row" style="margin-left: 30%; margin-right: 30%; margin-top: 3em">
     <form th:action="@{/save}" th:object="${contact}" method="post">
 
         <input type="hidden" name="id" th:field="*{id}"/>

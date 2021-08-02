@@ -9,40 +9,31 @@
 </head>
 <body>
 
-<div class="row">
+<div class="row" style="margin-left: 30%; margin-right: 30%; margin-top: 3em">
     <div class="col s12 m7">
         <div class="card">
             <div class="card-image">
-                <span class="card-title" th:text="${contact.firstName} + ' ' + ${contact.firstName}">Card Title</span>
+                <span class="card-title" th:text="${contact.firstName} + ' ' + ${contact.firstName}"></span>
             </div>
             <div class="card-content">
                 <div class="row">
-                    <div class="col 6s">
-                        <h5>First name:</h5>
-                    </div>
-                    <div class="col 6s">
+                    <div class="col 12s">
+                        <p>First name:</p>
                         <div th:text="${contact.firstName}"></div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col 6s">
-                        <h5>Last name:</h5>
-                    </div>
-                    <div class="col 6s">
+                    <div class="col 12s">
+                        <p>Last name:</p>
                         <div th:text="${contact.lastName}"></div>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col 6s">
-                        <h5>Age:</h5>
-                    </div>
-                    <div class="col 6s">
+                    <div class="col 12s">
+                        <p>Age:</p>
                         <div th:text="${contact.age}"></div>
-
                     </div>
                 </div>
-
-
             </div>
             <div class="card-action">
 
