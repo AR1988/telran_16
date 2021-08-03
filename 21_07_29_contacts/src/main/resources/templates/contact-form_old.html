@@ -9,41 +9,6 @@
 </head>
 <body>
 
-<nav>
-    <div class="nav-wrapper">
-        <a href="/contacts" class="brand-logo center">Contacts</a>
-        <ul id="nav-mobile" class="left hide-on-med-and-down">
-            <li>
-                <a href="/contacts">
-                    <i class="material-icons left">home</i>Contacts list
-                </a>
-            </li>
-            <li>
-                <a href="../form">
-                    <i class="material-icons left">add</i>Add contact
-                </a>
-            </li>
-        </ul>
-        <ul class="right hide-on-med-and-down">
-
-            <li>
-
-                <form th:action="@{/contacts/search}" method="post" class="row">
-                    <div class="col s6">
-                        <input id="search" name="searchName" placeholder="search ...">
-                        <label hidden for="search">Search</label>
-                    </div>
-                    <div class="col s6">
-                        <button class="btn btn-primary btn-lg" type="submit">Go
-                        </button>
-                    </div>
-                </form>
-
-            </li>
-        </ul>
-    </div>
-</nav>
-
 <div class="row" style="margin-left: 30%; margin-right: 30%; margin-top: 3em">
     <form th:action="@{/save}" th:object="${contact}" method="post">
 

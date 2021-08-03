@@ -1,15 +1,13 @@
 package com.example.contacts.controller;
 
 import com.example.contacts.dto.ContactToDisplayDto;
+import com.example.contacts.dto.SearchDto;
 import com.example.contacts.entity.Contact;
 import com.example.contacts.mapper.ContactMapper;
 import com.example.contacts.service.ContactService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,10 +39,18 @@ public class ContactController {
         return "contacts";
     }
 
-//    TODO создать новый эндпоинт, который будет обрабатывать поисковой запрос
-//     и возвращать темплейт с отфильтрованым списком
-//     @RequestMapping(value = "contacts/search", method = RequestMethod.POST)
+    @PostMapping("contacts/search")
+    public String searchByName(@ModelAttribute SearchDto searchDto, Model model) {
 
+        List<ContactToDisplayDto> contactToDisplayDtos = service
+                .searchByName(searchDto.searchName)
+                .stream()
+                .map(contact -> contactMapper.toDto(contact))
+                .collect(Collectors.toList());
+
+        model.addAttribute("contacts", contactToDisplayDtos);
+        return "contacts";
+    }
 
     @RequestMapping(value = "/contact-info/{id}", method = RequestMethod.GET)
     public String contactDetail(@PathVariable(name = "id") int contactId, Model model) {

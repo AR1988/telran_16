@@ -6,6 +6,7 @@ import com.example.contacts.repo.IContractRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
@@ -15,6 +16,12 @@ public class ContactService {
 
     public ContactService(IContractRepo repo) {
         this.repo = repo;
+
+        this.repo.add(new Contact("Vasja", "Pupkin", 18));
+        this.repo.add(new Contact("Max", "Mustermann", 35));
+        this.repo.add(new Contact("John", "Doe", 25));
+        this.repo.add(new Contact("Mark", "Schmidt", 27));
+        this.repo.add(new Contact("Anna", "Baumann", 26));
     }
 
     public List<Contact> getAllContacts() {
@@ -43,9 +50,12 @@ public class ContactService {
             contact.setAge(age);
     }
 
-//    TODO дописать
     public List<Contact> searchByName(String name) {
-        return
+        return repo
+                .getAll()
+                .stream()
+                .filter(contact -> contact.getFirstName().toLowerCase().contains(name.toLowerCase().trim()))
+                .collect(Collectors.toList());
     }
 
 
