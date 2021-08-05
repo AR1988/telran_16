@@ -17,9 +17,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf:2.5.3'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.5.3'
 
-    runtimeOnly 'org.postgresql:postgresql'
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '2.5.3'
 
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    runtimeOnly 'org.postgresql:postgresql:42.2.23.jre7'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.3'
 }
 
 test {

@@ -6,6 +6,7 @@ import com.example.contact_db.mapper.ContactMapper;
 import com.example.contact_db.service.ContactService;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,7 +30,7 @@ public class ContactRestController {
     //url searchByName:     GET         host/api/contact/search?name=searchValue
 
     @PostMapping("/contact")
-    public void add(@RequestBody ContactToAddDto contactToAddDto) {
+    public void add(@RequestBody @Valid ContactToAddDto contactToAddDto) {
         service.addContact(contactToAddDto.firstName, contactToAddDto.lastName, contactToAddDto.age);
     }
 

@@ -7,7 +7,6 @@ import com.example.contact_db.repo.IContractRepo;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ContactService {
@@ -18,29 +17,29 @@ public class ContactService {
     public ContactService(IContractRepo repo) {
         this.repo = repo;
 
-        this.repo.add(new Contact("Vasja", "Pupkin", 18));
-        this.repo.add(new Contact("Max", "Mustermann", 35));
-        this.repo.add(new Contact("John", "Doe", 25));
-        this.repo.add(new Contact("Mark", "Schmidt", 27));
-        this.repo.add(new Contact("Anna", "Baumann", 26));
+        this.repo.save(new Contact("Vasja", "Pupkin", 18));
+        this.repo.save(new Contact("Max", "Mustermann", 35));
+        this.repo.save(new Contact("John", "Doe", 25));
+        this.repo.save(new Contact("Mark", "Schmidt", 27));
+        this.repo.save(new Contact("Anna", "Baumann", 26));
     }
 
     public List<Contact> getAllContacts() {
-        return repo.getAll();
+        return repo.findAll();
     }
 
     public Contact getById(int contactId) {
-        return repo.getById(contactId)
+        return repo.findById(contactId)
                 .orElseThrow(() -> new ContactNotFoundException(CONTACT_NOT_FOUND));
     }
 
     public void addContact(String firstName, String lastName, int age) {
         Contact contact = new Contact(firstName, lastName, age);
-        repo.add(contact);
+        repo.save(contact);
     }
 
     public void editContact(String firstName, String lastName, int age, int contactId) {
-        Contact contact = repo.getById(contactId)
+        Contact contact = repo.findById(contactId)
                 .orElseThrow(() -> new ContactNotFoundException(CONTACT_NOT_FOUND));
 
         if (firstName != null)
@@ -49,21 +48,18 @@ public class ContactService {
             contact.setLastName(lastName);
         if (age > 0)
             contact.setAge(age);
+
+        repo.save(contact);
     }
 
     public List<Contact> searchByName(String name) {
-        return repo
-                .getAll()
-                .stream()
-                .filter(contact -> contact.getFirstName().toLowerCase().contains(name.toLowerCase().trim()))
-                .collect(Collectors.toList());
+        return repo.findAllByFirstNameContainsIgnoreCase(name);
     }
 
-
     public void deleteById(int contactId) {
-        Contact contact = repo.getById(contactId)
-                .orElseThrow(() -> new ContactNotFoundException(CONTACT_NOT_FOUND));
-
-        repo.delete(contact);
+        if (repo.existsById(contactId))
+            repo.deleteById(contactId);
+        else
+            throw new ContactNotFoundException(CONTACT_NOT_FOUND);
     }
 }

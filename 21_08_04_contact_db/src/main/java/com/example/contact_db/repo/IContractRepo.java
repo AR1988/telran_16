@@ -1,19 +1,23 @@
 package com.example.contact_db.repo;
 
-
 import com.example.contact_db.entity.Contact;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 
 import java.util.List;
-import java.util.Optional;
 
-public interface IContractRepo {
+public interface IContractRepo extends CrudRepository<Contact, Integer> {
 
-    void add(Contact contact);
+    List<Contact> findAll();
 
-    List<Contact> getAll();
+    List<Contact> findAllByFirstNameContainsIgnoreCase(String firstName);
 
-    Optional<Contact> getById(int id);
+    List<Contact> findAllByLastNameContains(String term);
 
-    void delete(Contact contact);
+    List<Contact> findAllByFirstName(String fistName);
 
+    @Query("select c from Contact c where c.age > ?1")
+    List<Contact> someSql(int age);
+
+    List<Contact> findAllByAgeGreaterThan(int age);
 }
