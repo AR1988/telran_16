@@ -1,0 +1,11 @@
+.hide-element {
+    visibility: hidden;
+}
+
+.hover:hover {
+    background: aquamarine;
+}
+
+.pointer {
+    cursor: pointer;
+}
