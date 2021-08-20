@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     const contactFormListener = new ContactFormListener(contactFormDOM, contactService);
     const contactWrapperListener = new ContactWrapperListener(contactService);
-    const searchFormListener = new SearchFormListener(contactService);
+    const searchFormListener = new SearchFormListener(contactService, searchFormDOM);
 
 
     contactFormDOM.addEventListener('click', contactFormListener);
@@ -20,10 +20,31 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 class SearchFormListener {
-    constructor(contactService) {
+    constructor(contactService, searchFormDOM) {
         this.contactService = contactService;
+        this.searchFormDOM = searchFormDOM;
     }
 
+    handleEvent(event) {
+        const aElementDom = event.target.closest("a");
+
+        if (aElementDom !== null) {
+            const action = aElementDom.dataset.action;
+            this[action](event);
+        }
+    }
+
+    search(event) {
+        const searchDom = event.currentTarget;
+        const searchTerm = searchDom.elements.searchName.value;
+
+        this.contactService.filter(searchTerm.toLowerCase());
+    }
+
+    reset(event) {
+        this.searchFormDOM.reset();
+        this.contactService.reloadAll();
+    }
 }
 
 class ContactWrapperListener {
@@ -104,12 +125,18 @@ class ContactFormListener {
     }
 
     save(event) {
-        console.log("edit/save")
-        // TODO извменение контакта (complete edit)
+        const contactForm = event.currentTarget;
+        const contact = {
+            firstName: contactForm.elements.firstName.value,
+            lastName: contactForm.elements.lastName.value,
+            age: contactForm.elements.age.value,
+            id: +contactForm.elements.id.value
+        }
+        this.contactService.completeEdit(contact);
     }
 
     cancel(event) {
-        // TODO отмена формы редактирования
+        this.contactService.cancelEdit();
     }
 }
 
@@ -159,13 +186,22 @@ class ContactRenderer {
         this.cancelButtonDom.classList.remove('hide-element');
 
         this.contactFormDOM.elements.firstName.value = contact.firstName;
-        // this.contactFormDOM.elements.lastName.value = contact.lastName;
-        this.contactFormDOM.elements.lastName.setAttribute("value", contact.lastName);
+        this.contactFormDOM.elements.lastName.value = contact.lastName;
+        // this.contactFormDOM.elements.lastName.setAttribute("value", contact.lastName);
         this.contactFormDOM.elements.age.value = contact.age;
+        this.contactFormDOM.elements.id.value = contact.id;
     }
 
     toAddForm() {
-        //TODO убирает кнопки "save", "cancel". Отображает кнопку "add". Очищает поля ввода.
+        this.addButtonDom.classList.remove("hide-element");
+        this.editButtonDom.classList.add('hide-element');
+        this.cancelButtonDom.classList.add('hide-element');
+
+        this.contactFormDOM.elements.firstName.value = "";
+        this.contactFormDOM.elements.lastName.value = "";
+        // this.contactFormDOM.elements.lastName.setAttribute("value", "");
+        this.contactFormDOM.elements.age.value = "";
+        this.contactFormDOM.reset();
     }
 
     clearAll() {
@@ -175,7 +211,8 @@ class ContactRenderer {
     }
 
     toggleContactDetails(contactDom) {
-        contactDom.querySelector(".contact-item-details").classList.toggle("hide-element");
+        contactDom.querySelector(".contact-item-details")
+            .classList.toggle("hide-element");
     }
 }
 
@@ -205,7 +242,7 @@ class ContactService {
 
         if (index >= 0) {
             this.fakeContacts.splice(index, 1);
-            this._reloadAll();
+            this.reloadAll();
         }
     }
 
@@ -216,18 +253,11 @@ class ContactService {
 
         // this.contactRenderer.renderContacts([contact]);
 
-        this._reloadAll();
+        this.reloadAll();
     }
 
     toggleDetails(contactDom) {
         this.contactRenderer.toggleContactDetails(contactDom);
-    }
-
-    edit(contact) {
-        const index = this.fakeContacts.indexOf(contact);
-        this.fakeContacts[index] = contact;
-
-        this._reloadAll();
     }
 
     startEdit(contact) {
@@ -235,20 +265,32 @@ class ContactService {
     }
 
     completeEdit(contact) {
-        //TODO изменяет в массиве контакт
-        // переключает форму на форму добавления
+        if (contact.id === 0)
+            console.log("Entity not found")
+
+        const index = this.fakeContacts.findIndex(value => value.id === contact.id);
+        if (index > -1) {
+            this.fakeContacts[index] = contact;
+            this.reloadAll();
+
+            this.contactRenderer.toAddForm();
+        } else {
+            console.log("Element not found");
+        }
     }
 
     cancelEdit() {
-        // this.contactRenderer.toAddForm();
-        //TODO переключает форму на форму добавления
+        this.contactRenderer.toAddForm();
     }
 
     filter(str) {
-    //TODO  отсортировать массив по str
+        this.contactRenderer.clearAll();
+        const searchResult = this.fakeContacts
+            .filter(value => value.firstName.toLowerCase().includes(str) || value.lastName.toLowerCase().includes(str));
+        this.contactRenderer.renderContacts(searchResult);
     }
 
-    _reloadAll() {
+    reloadAll() {
         this.contactRenderer.clearAll();
         this.getAll();
     }
