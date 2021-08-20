@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/contacts")
 public class ContactRestController {
 
     private final ContactService service;
@@ -21,24 +21,24 @@ public class ContactRestController {
         this.contactMapper = contactMapper;
     }
 
-    //url add:              POST        host/api/contact
-    //url edit:             PUT         host/api/contact/{contactId}
+    //url add:              POST        host/api/contacts
+    //url edit:             PUT         host/api/contacts/{contactId}
     //url getAll:           GET         host/api/contacts
-    //url getById:          GET         host/api/contact/{contactId}
-    //url deleteById:       DELETE      host/api/contact/{contactId}
-    //url searchByName:     GET         host/api/contact/search?name=searchValue
+    //url getById:          GET         host/api/contacts/{contactId}
+    //url deleteById:       DELETE      host/api/contacts/{contactId}
+    //url searchByName:     GET         host/api/contacts/search?name=searchValue
 
-    @PostMapping("/contact")
+    @PostMapping("")
     public void add(@RequestBody ContactToAddDto contactToAddDto) {
         service.addContact(contactToAddDto.firstName, contactToAddDto.lastName, contactToAddDto.age);
     }
 
-    @PutMapping("/contact/{id}")
+    @PutMapping("/{id}")
     public void edit(@RequestBody ContactToAddDto contactToAddDto, @PathVariable(name = "id") int contactId) {
         service.editContact(contactToAddDto.firstName, contactToAddDto.lastName, contactToAddDto.age, contactId);
     }
 
-    @GetMapping("/contacts")
+    @GetMapping("")
     public List<ContactToDisplayDto> getAll() {
         return service.getAllContacts()
                 .stream()
@@ -47,21 +47,21 @@ public class ContactRestController {
                 .collect(Collectors.toList());
     }
 
-    @GetMapping("/contact/{id}")
-    public ContactToDisplayDto getById(@PathVariable int id) {
-        return contactMapper.toDto(service.getById(id));
-    }
+//    @GetMapping("/{id}")
+//    public ContactToDisplayDto getById(@PathVariable int id) {
+//        return contactMapper.toDto(service.getById(id));
+//    }
 
-    @DeleteMapping("/contact/{id}")
+    @DeleteMapping("/{id}")
     public void deleteById(@PathVariable int id) {
         service.deleteById(id);
     }
 
-    @GetMapping("contact/search")
-    public List<ContactToDisplayDto> searchByName(@RequestParam(name = "name") String searchTerm) {
-        return service.searchByName(searchTerm)
-                .stream()
-                .map(contactMapper::toDto)
-                .collect(Collectors.toList());
-    }
+//    @GetMapping("/search")
+//    public List<ContactToDisplayDto> searchByName(@RequestParam(name = "name") String searchTerm) {
+//        return service.searchByName(searchTerm)
+//                .stream()
+//                .map(contactMapper::toDto)
+//                .collect(Collectors.toList());
+//    }
 }

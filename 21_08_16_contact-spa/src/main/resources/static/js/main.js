@@ -1,3 +1,34 @@
+HOST = "http://localhost:8080/api/contacts"
+
+class ContactClient {
+
+    getAllContact() {
+        return fetch(HOST);
+    }
+
+    remove(id) {
+        return fetch(`${HOST}/${id}`, {
+            method: "DELETE"
+        });
+    }
+
+    edit(contact) {
+        return fetch(`${HOST}/${contact.id}`, {
+            method: 'PUT',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(contact)
+        });
+    }
+
+    add(contact) {
+        return fetch(HOST, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify(contact)
+        });
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function () {
     const contactWrapperDOM = document.querySelector("#contact-wrapper");
     const contactTemplateDOM = document.querySelector("#contact-template");
@@ -6,8 +37,8 @@ document.addEventListener('DOMContentLoaded', function () {
     const searchFormDOM = document.querySelector("#search-form");
 
     const contactRenderer = new ContactRenderer(contactWrapperDOM, contactTemplateDOM, contactFormDOM);
-
-    const contactService = new ContactService(contactRenderer);
+    const contactClient = new ContactClient();
+    const contactService = new ContactService(contactRenderer, contactClient);
 
     const contactFormListener = new ContactFormListener(contactFormDOM, contactService);
     const contactWrapperListener = new ContactWrapperListener(contactService);
@@ -218,42 +249,48 @@ class ContactRenderer {
 
 class ContactService {
 
-    fakeContacts = [
-        {firstName: "Max", lastName: "Mustermann", age: 25, id: 1},
-        {firstName: "Vasja", lastName: "Pupkin", age: 18, id: 2},
-        {firstName: "John", lastName: "Doe", age: 35, id: 3},
-        {firstName: "Mark", lastName: "Schmidt", age: 43, id: 4},
-        {firstName: "Anna", lastName: "Baumann", age: 34, id: 5}
-    ];
+    contacts;
 
-    constructor(contactRenderer) {
+    constructor(contactRenderer, contactClient) {
         this.contactRenderer = contactRenderer;
+        this.contactClient = contactClient;
 
         this.getAll();
     }
 
-    getAll() {
-        this.contactRenderer.renderContacts(this.fakeContacts);
-    }
+    // //ассинхронно
+    // getAll() {
+    //     this.contactClient
+    //         .getAllContact()
+    //         .then(response => {
+    //             return response.json();
+    //         })
+    //         .then(contactsData => {
+    //             this.contactRenderer.renderContacts(contactsData);
+    //         });
+    // }
 
-    remove(contact) {
-        // const index = this.fakeContacts.findIndex(value => value.id === contact.id);
-        const index = this.fakeContacts.indexOf(contact);
+    //синхронно
+    async getAll() {
+        const response = await this.contactClient.getAllContact();
 
-        if (index >= 0) {
-            this.fakeContacts.splice(index, 1);
-            this.reloadAll();
+        if (response.ok) {
+            const contacts = await response.json();
+            this.contacts = contacts;
+            this.contactRenderer.renderContacts(contacts)
         }
     }
 
-    add(contact) {
-        const lastIndex = this.fakeContacts[this.fakeContacts.length - 1].id;
-        contact.id = lastIndex + 1;
-        this.fakeContacts.push(contact);
+    async remove(contact) {
+        const response = await this.contactClient.remove(contact.id);
+        if (response.ok)
+            this.reloadAll();
+    }
 
-        // this.contactRenderer.renderContacts([contact]);
-
-        this.reloadAll();
+    async add(contact) {
+        const response = await this.contactClient.add(contact);
+        if (response.ok)
+            this.reloadAll();
     }
 
     toggleDetails(contactDom) {
@@ -264,18 +301,13 @@ class ContactService {
         this.contactRenderer.toEditForm(contact);
     }
 
-    completeEdit(contact) {
+    async completeEdit(contact) {
         if (contact.id === 0)
             console.log("Entity not found")
 
-        const index = this.fakeContacts.findIndex(value => value.id === contact.id);
-        if (index > -1) {
-            this.fakeContacts[index] = contact;
+        const response = await this.contactClient.edit(contact);
+        if (response.ok) {
             this.reloadAll();
-
-            this.contactRenderer.toAddForm();
-        } else {
-            console.log("Element not found");
         }
     }
 
@@ -285,7 +317,7 @@ class ContactService {
 
     filter(str) {
         this.contactRenderer.clearAll();
-        const searchResult = this.fakeContacts
+        const searchResult = this.contacts
             .filter(value => value.firstName.toLowerCase().includes(str) || value.lastName.toLowerCase().includes(str));
         this.contactRenderer.renderContacts(searchResult);
     }
