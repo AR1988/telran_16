@@ -10,11 +10,18 @@ import {Observable} from "rxjs";
 })
 export class DashboardComponent implements OnInit {
   public heroes$!: Observable<Hero[]>;
+  str = 'string';
 
   constructor(public heroService: HeroService) {
   }
 
   ngOnInit() {
     this.heroes$ = this.heroService.getHeroes();
+    this.heroService.searchTerms
+      .subscribe(value => console.log('from dashboard: ' + value))
+  }
+
+  onEvent(event: string) {
+    console.log(event);
   }
 }

@@ -1,13 +1,22 @@
 <h2>My Heroes</h2>
 
 <div>
-  <label>Hero name:
-    <input #heroName/>
-  </label>
-  <!-- (click) passes input value to add() and then clears the input -->
-  <button (click)="add(heroName.value); heroName.value=''">
-    add
-  </button>
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+    <label for="hero-input">Hero name</label>
+    <input id="hero-input" formControlName="name">
+
+
+    <button type="submit">add</button>
+    <button type="reset">cancel</button>
+
+    <div *ngIf="form.invalid">
+      <p *ngIf="form.controls['name'].hasError('maxlength') && submitted">maxlength</p>
+      <p *ngIf="form.controls['name'].hasError('minlength') && submitted" >minlength</p>
+      <p *ngIf="form.controls['name'].hasError('required') && submitted">required</p>
+    </div>
+
+  </form>
 </div>
 
 <ul class="heroes">
@@ -19,6 +28,7 @@
     </a>
 
     <button class="delete" title="delete hero"
-            (click)="delete(hero)">x</button>
+            (click)="delete(hero)">x
+    </button>
   </li>
 </ul>

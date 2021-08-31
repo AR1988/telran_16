@@ -3,6 +3,7 @@ import {Hero} from "../hero";
 import {HeroService} from "../hero.service";
 import {MessageService} from "../message.service";
 import {Router} from "@angular/router";
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 
 @Component({
   selector: 'app-heroes',
@@ -14,13 +15,21 @@ export class HeroesComponent implements OnInit, OnDestroy {
   heroes: Hero[] | undefined;
   selectedHero: Hero | undefined;
 
+  form!: FormGroup;
+  submitted = false;
+
   constructor(private heroService: HeroService,
               private messageService: MessageService,
-              private router: Router) {
+              private router: Router,
+              private fb: FormBuilder) {
   }
 
   ngOnInit(): void {
-    console.log("HeroesComponent init")
+    this.form = this.fb.group({
+        name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(20)]]
+      }
+    );
+
     this.getHeroes();
   }
 
@@ -47,6 +56,8 @@ export class HeroesComponent implements OnInit, OnDestroy {
   }
 
   add(name: string): void {
+    this.submitted = false;
+
     name = name.trim();
     if (!name) {
       return;
@@ -61,5 +72,14 @@ export class HeroesComponent implements OnInit, OnDestroy {
   delete(hero: Hero): void {
     this.heroService.deleteHero(hero)
       .subscribe(() => this.heroes = this.heroes!.filter(h => h !== hero));
+  }
+
+  onSubmit() {
+    this.submitted = true;
+
+    if (this.form.valid) {
+      const heroName = this.form.controls.name.value;
+      this.add(heroName);
+    }
   }
 }

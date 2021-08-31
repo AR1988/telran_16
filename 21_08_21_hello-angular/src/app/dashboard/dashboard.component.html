@@ -9,4 +9,6 @@
   </a>
 </div>
 
-<app-hero-search></app-hero-search>
+<app-hero-search (searchTerm)="onEvent($event)"></app-hero-search>
+
+<app-search-result></app-search-result>

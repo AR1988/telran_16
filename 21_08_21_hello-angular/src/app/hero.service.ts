@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {Hero} from "./hero";
-import {Observable, of} from "rxjs";
+import {Observable, of, Subject} from "rxjs";
 import {MessageService} from "./message.service";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {catchError, tap} from "rxjs/operators";
@@ -11,6 +11,9 @@ import {catchError, tap} from "rxjs/operators";
 export class HeroService {
 
   private heroesUrl = 'http://localhost:8080/api/heroes';
+
+  public searchTerms = new Subject<string>();
+
 
   httpOptions = {
     headers: new HttpHeaders({'Content-Type': 'application/json'})
