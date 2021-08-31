@@ -10,6 +10,7 @@ import java.util.List;
 
 @Service
 public class HeroService {
+
     private static final String HERO_NOT_FOUND = "HERO not found";
     private final IHeroRepo repo;
 
@@ -49,6 +50,4 @@ public class HeroService {
     public List<Hero> searchByName(String name) {
         return new ArrayList<>(repo.findHeroByNameContains(name));
     }
-
-
 }
