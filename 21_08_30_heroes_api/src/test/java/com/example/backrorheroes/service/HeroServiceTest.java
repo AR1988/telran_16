@@ -38,6 +38,31 @@ public class HeroServiceTest {
     }
 
     @Test
+    public void editHero() {
+        Hero hero = new Hero("oldHero");
+
+        when(repo.findById(123123)).thenReturn(Optional.of(hero));
+
+        heroService.editHero("newHero", 123123);
+
+        verify(repo, times(1)).findById(123123);
+        verify(repo, times(1)).save(argThat(argument -> argument.getName().equals("newHero")));
+    }
+
+
+    @Test
+    public void editHero_nameIsNull() {
+        Hero hero = new Hero("oldHero");
+
+        when(repo.findById(123)).thenReturn(Optional.of(hero));
+
+        heroService.editHero(null, 123);
+
+        verify(repo, times(1)).findById(123);
+        verify(repo, times(1)).save(argThat(argument -> argument.getName().equals("oldHero")));
+    }
+
+    @Test
     public void getByIdTest_heroNotFound() {
         Exception exception = assertThrows(HeroNotFoundException.class, () -> heroService.getById(898));
 
